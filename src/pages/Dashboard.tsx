@@ -1,29 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Skeleton } from '../components/UI';
+import { Card, Skeleton, Button } from '../components/UI';
 import { TrendingUp, TrendingDown, DollarSign, Users, Package, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { statsService } from '../services/statsService';
 import { formatCurrency } from '../utils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import toast from 'react-hot-toast';
+import { useAuth } from '../contexts/AuthContext';
 
 export const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchStats = async () => {
+      if (!user) return;
       try {
         setLoading(true);
-        const data = await statsService.getDashboardStats();
+        setError(null);
+        const data = await statsService.getDashboardStats(user.id);
         setStats(data);
-      } catch (error: any) {
-        toast.error('Erro ao carregar estatísticas: ' + error.message);
+      } catch (err: any) {
+        console.error('Dashboard Error:', err);
+        const msg = err.message || 'Erro desconhecido ao carregar dados';
+        setError(msg);
+        toast.error('Erro: ' + msg);
       } finally {
         setLoading(false);
       }
     };
     fetchStats();
-  }, []);
+  }, [user]);
 
   if (loading) {
     return (
@@ -36,6 +45,22 @@ export const Dashboard: React.FC = () => {
           <Skeleton className="h-32 w-full" />
         </div>
         <Skeleton className="h-80 w-full" />
+      </div>
+    );
+  }
+
+  if (!stats) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 gap-4">
+        {error ? (
+          <>
+            <p className="text-red-500 font-bold text-center">Falha ao carregar dashboard</p>
+            <p className="text-gray-400 text-sm">{error}</p>
+            <Button onClick={() => window.location.reload()} variant="ghost">Tentar Novamente</Button>
+          </>
+        ) : (
+          <p className="text-gray-500 font-bold">Iniciando dashboard...</p>
+        )}
       </div>
     );
   }

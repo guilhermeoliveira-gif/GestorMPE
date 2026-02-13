@@ -1,9 +1,35 @@
 import { supabase } from '../lib/supabase';
 
 export const statsService = {
-    async getDashboardStats() {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) throw new Error('User not authenticated');
+    async getDashboardStats(userId?: string) {
+        let finalUserId = userId;
+
+        if (!finalUserId) {
+            const { data: { user } } = await supabase.auth.getUser();
+            finalUserId = user?.id;
+        }
+
+        if (!finalUserId) throw new Error('User not authenticated');
+
+        // Special handling for Demo Mode
+        if (finalUserId === 'demo-user-id') {
+            return {
+                totalRevenue: 25750.50,
+                monthlyRevenue: 12400.00,
+                totalPending: 3200.00,
+                totalPayable: 850.00,
+                totalReceivableFinance: 1200.00,
+                clientCount: 42,
+                topProducts: [
+                    { nome: 'Produto Demo A', total: 15 },
+                    { nome: 'Produto Demo B', total: 12 }
+                ],
+                salesByDay: Array.from({ length: 7 }, (_, i) => ({
+                    day: new Date(Date.now() - (6 - i) * 86400000).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+                    total: Math.random() * 500 + 200
+                }))
+            };
+        }
 
         // 1. Orders Stats
         const { data: orders, error: ordersError } = await supabase
