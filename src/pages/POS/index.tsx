@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Card, Dialog } from '../../components/UI';
-import { clientService } from '../../services/clientService';
-import { Product, OrderItem, PaymentMethod, Client } from '../../types';
-import { productService } from '../../services/productService';
-import { orderService } from '../../services/orderService';
-import { ProductCard } from '../../components/POS/ProductCard';
-import { Cart } from '../../components/POS/Cart';
-import { PaymentModal } from '../../components/POS/PaymentModal';
-import { SaleSuccessModal } from '../../components/POS/SaleSuccessModal';
-import { settingsService, CompanySettings } from '../../services/settingsService';
+import { Button, Input, Card, Dialog } from '@/components/UI';
+import { clientService } from '@/services/clientService';
+import { Product, OrderItem, PaymentMethod, Client } from '@/types';
+import { productService } from '@/services/productService';
+import { orderService } from '@/services/orderService';
+import { ProductCard } from '@/components/POS/ProductCard';
+import { Cart } from '@/components/POS/Cart';
+import { PaymentModal } from '@/components/POS/PaymentModal';
+import { SaleSuccessModal } from '@/components/POS/SaleSuccessModal';
+import { settingsService, CompanySettings } from '@/services/settingsService';
 import { Search, ShoppingBag, User as UserIcon, X } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { formatCurrency } from '../../utils';
+import { formatCurrency } from '@/utils';
 
 export const POSPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);

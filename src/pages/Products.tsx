@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { productService } from '../services/productService';
+import { productService } from '@/services/productService';
 import { Button, Input, Card, Dialog, Skeleton } from '../components/UI';
 import { Product } from '../types';
 import toast from 'react-hot-toast';
