@@ -1,19 +1,19 @@
 import React from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { Layout } from './components/Layout';
-import { LandingPage } from './pages/LandingPage';
-import { Login, Register, ForgotPassword } from './pages/Auth';
-import { Dashboard } from './pages/Dashboard';
-import { Clients } from './pages/Clients';
-import { Products } from './pages/Products';
-import { SalesHistory } from './pages/SalesHistory';
-import { Users } from './pages/Users';
-import { UserRole } from './types';
-import { FinancialDashboard } from './pages/Financial/Dashboard';
-import { POSPage } from './pages/POS';
-import { Settings } from './pages/Settings';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { Layout } from '@/components/Layout';
+import { LandingPage } from '@/pages/LandingPage';
+import { Login, Register, ForgotPassword } from '@/pages/Auth';
+import { Dashboard } from '@/pages/Dashboard';
+import { Clients } from '@/pages/Clients';
+import { Products } from '@/pages/Products';
+import { SalesHistory } from '@/pages/SalesHistory';
+import { Users } from '@/pages/Users';
+import { UserRole } from '@/types';
+import { FinancialDashboard } from '@/pages/Financial/Dashboard';
+import { POSPage } from '@/pages/POS';
+import { Settings } from '@/pages/Settings';
 
 // Protected Route Component
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {

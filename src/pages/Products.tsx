@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { productService } from '@/services/productService';
-import { Button, Input, Card, Dialog, Skeleton } from '../components/UI';
-import { Product } from '../types';
+import { Button, Input, Card, Dialog, Skeleton } from '@/components/UI';
+import { Product } from '@/types';
 import toast from 'react-hot-toast';
 import { Plus, Search, Edit, Trash2, Package, Image as ImageIcon } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { formatCurrency } from '../utils';
+import { useAuth } from '@/contexts/AuthContext';
+import { formatCurrency } from '@/utils';
 
 export const Products: React.FC = () => {
   const { user } = useAuth();
