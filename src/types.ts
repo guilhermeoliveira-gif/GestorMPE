@@ -15,7 +15,7 @@ export interface UserProfile {
 
 export interface Client {
   id: string;
-  company_id: string;
+  company_id?: string;
   nome_completo: string;
   cpf_cnpj: string;
   endereco: string;
@@ -28,7 +28,7 @@ export interface Client {
 
 export interface Product {
   id: string;
-  company_id: string;
+  company_id?: string;
   nome: string;
   descricao: string;
   sku: string;

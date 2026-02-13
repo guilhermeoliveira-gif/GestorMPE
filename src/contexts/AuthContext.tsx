@@ -83,7 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       id: 'demo-user-id',
       email: 'admin@demo.com',
       app_metadata: {},
-      user_metadata: { full_name: 'Usuário Demo' },
+      user_metadata: { full_name: 'Usuário Demo', company_id: '00000000-0000-0000-0000-000000000000' },
       aud: 'authenticated',
       created_at: new Date().toISOString()
     } as User;
