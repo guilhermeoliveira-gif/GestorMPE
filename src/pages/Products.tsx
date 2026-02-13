@@ -71,7 +71,7 @@ export const Products: React.FC = () => {
       } else {
         await productService.saveProduct({
           ...currentProduct,
-          company_id: user?.user_metadata?.company_id || undefined
+          company_id: user?.user_metadata?.company_id || user?.id
         } as Product);
         toast.success('Produto cadastrado com sucesso!');
       }

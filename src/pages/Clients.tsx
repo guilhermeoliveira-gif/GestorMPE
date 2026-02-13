@@ -69,7 +69,7 @@ export const Clients: React.FC = () => {
       } else {
         await clientService.saveClient({
           ...currentClient,
-          company_id: user?.user_metadata?.company_id || undefined
+          company_id: user?.user_metadata?.company_id || user?.id
         } as Client);
         toast.success('Cliente cadastrado com sucesso!');
       }
