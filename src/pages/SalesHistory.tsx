@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { Search, Plus, Minus, Trash, ShoppingCart, Check } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
-export const Orders: React.FC = () => {
+export const SalesHistory: React.FC = () => {
    const { user } = useAuth();
    const [products, setProducts] = useState<Product[]>([]);
    const [cart, setCart] = useState<CartItem[]>([]);

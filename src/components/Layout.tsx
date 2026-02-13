@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation, Navigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Package, 
-  ShoppingCart, 
-  DollarSign, 
-  Receipt, 
-  Settings, 
-  UserCog, 
-  Menu, 
+import {
+  LayoutDashboard,
+  Users,
+  Package,
+  ShoppingCart,
+  DollarSign,
+  Receipt,
+  Settings,
+  UserCog,
+  Menu,
   X,
-  LogOut
+  LogOut,
+  FileText
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { UserRole } from '../types';
@@ -26,7 +27,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
 
   if (loading) return <div className="h-screen flex items-center justify-center text-indigo-600">Carregando...</div>;
-  
+
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
@@ -35,9 +36,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const navItems = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
+    { name: 'PDV', icon: ShoppingCart, path: '/pdv' },
+    { name: 'Histórico', icon: FileText, path: '/historico-vendas' },
     { name: 'Clientes', icon: Users, path: '/clientes' },
     { name: 'Produtos', icon: Package, path: '/produtos' },
-    { name: 'Pedidos', icon: ShoppingCart, path: '/pedidos' },
     { name: 'Financeiro', icon: DollarSign, path: '/financeiro' },
     { name: 'NF-e', icon: Receipt, path: '/nfe' },
     { name: 'Configurações', icon: Settings, path: '/configuracoes' },
@@ -52,7 +54,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile Backdrop */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
@@ -79,8 +81,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               onClick={() => setSidebarOpen(false)}
               className={({ isActive }) => `
                 flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200
-                ${isActive 
-                  ? 'bg-indigo-50 text-indigo-600 font-semibold' 
+                ${isActive
+                  ? 'bg-indigo-50 text-indigo-600 font-semibold'
                   : 'text-gray-600 hover:bg-indigo-50 hover:text-indigo-700'}
               `}
             >
@@ -88,8 +90,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span className="font-sans">{item.name}</span>
             </NavLink>
           ))}
-          
-          <button 
+
+          <button
             onClick={signOut}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-500 hover:bg-red-50 transition-colors duration-200 mt-8"
           >

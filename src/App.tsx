@@ -8,9 +8,11 @@ import { Login, Register, ForgotPassword } from './pages/Auth';
 import { Dashboard } from './pages/Dashboard';
 import { Clients } from './pages/Clients';
 import { Products } from './pages/Products';
-import { Orders } from './pages/Orders';
+import { SalesHistory } from './pages/SalesHistory';
 import { Users } from './pages/Users';
 import { UserRole } from './types';
+import { FinancialDashboard } from './pages/Financial/Dashboard';
+import { POSPage } from './pages/POS';
 
 // Protected Route Component
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -29,7 +31,7 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 // Role Guard Component
 const RoleRoute: React.FC<{ children: React.ReactNode; allowedRoles: UserRole[] }> = ({ children, allowedRoles }) => {
   const { role, loading } = useAuth();
-  
+
   if (loading) return null;
 
   if (!role || !allowedRoles.includes(role)) {
@@ -50,33 +52,41 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/recuperar" element={<ForgotPassword />} />
           <Route path="/cadastro" element={<Register />} />
-          
+
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          
+
           <Route path="/clientes" element={
             <PrivateRoute>
-               <RoleRoute allowedRoles={[UserRole.ADMIN, UserRole.SALES]}>
-                 <Clients />
-               </RoleRoute>
+              <RoleRoute allowedRoles={[UserRole.ADMIN, UserRole.SALES]}>
+                <Clients />
+              </RoleRoute>
             </PrivateRoute>
           } />
 
           <Route path="/produtos" element={
             <PrivateRoute>
-               <RoleRoute allowedRoles={[UserRole.ADMIN, UserRole.SALES]}>
-                 <Products />
-               </RoleRoute>
+              <RoleRoute allowedRoles={[UserRole.ADMIN, UserRole.SALES]}>
+                <Products />
+              </RoleRoute>
             </PrivateRoute>
           } />
 
-          <Route path="/pedidos" element={
+          <Route path="/pdv" element={
             <PrivateRoute>
-               <RoleRoute allowedRoles={[UserRole.ADMIN, UserRole.SALES]}>
-                 <Orders />
-               </RoleRoute>
+              <RoleRoute allowedRoles={[UserRole.ADMIN, UserRole.SALES]}>
+                <POSPage />
+              </RoleRoute>
             </PrivateRoute>
           } />
-          
+
+          <Route path="/historico-vendas" element={
+            <PrivateRoute>
+              <RoleRoute allowedRoles={[UserRole.ADMIN, UserRole.SALES]}>
+                <SalesHistory />
+              </RoleRoute>
+            </PrivateRoute>
+          } />
+
           <Route path="/usuarios" element={
             <PrivateRoute>
               <RoleRoute allowedRoles={[UserRole.ADMIN]}>
@@ -87,13 +97,13 @@ const App: React.FC = () => {
 
           {/* Finance Route Protected */}
           <Route path="/financeiro" element={
-             <PrivateRoute>
-                <RoleRoute allowedRoles={[UserRole.ADMIN, UserRole.FINANCE]}>
-                    <div>Página Financeira (Em desenvolvimento)</div>
-                </RoleRoute>
-             </PrivateRoute>
+            <PrivateRoute>
+              <RoleRoute allowedRoles={[UserRole.ADMIN, UserRole.FINANCE]}>
+                <FinancialDashboard />
+              </RoleRoute>
+            </PrivateRoute>
           } />
-          
+
           <Route path="/nfe" element={<PrivateRoute><div>Página NF-e (Em desenvolvimento)</div></PrivateRoute>} />
           <Route path="/configuracoes" element={<PrivateRoute><div>Página Configurações (Em desenvolvimento)</div></PrivateRoute>} />
 
