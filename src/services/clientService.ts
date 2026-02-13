@@ -24,6 +24,15 @@ export const clientService = {
     },
 
     async saveClient(client: Omit<Client, 'id' | 'created_at'>) {
+        if (client.company_id === 'demo-user-id') {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            return {
+                ...client,
+                id: crypto.randomUUID(),
+                created_at: new Date().toISOString()
+            } as Client;
+        }
+
         const { data, error } = await supabase
             .from('clients')
             .insert([client])

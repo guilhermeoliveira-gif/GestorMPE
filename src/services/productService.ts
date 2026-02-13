@@ -24,6 +24,15 @@ export const productService = {
     },
 
     async saveProduct(product: Omit<Product, 'id' | 'created_at'>) {
+        if (product.company_id === 'demo-user-id') {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            return {
+                ...product,
+                id: crypto.randomUUID(),
+                created_at: new Date().toISOString()
+            } as Product;
+        }
+
         const { data, error } = await supabase
             .from('products')
             .insert([product])
