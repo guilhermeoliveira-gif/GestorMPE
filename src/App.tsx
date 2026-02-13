@@ -13,6 +13,7 @@ import { Users } from './pages/Users';
 import { UserRole } from './types';
 import { FinancialDashboard } from './pages/Financial/Dashboard';
 import { POSPage } from './pages/POS';
+import { Settings } from './pages/Settings';
 
 // Protected Route Component
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -105,7 +106,7 @@ const App: React.FC = () => {
           } />
 
           <Route path="/nfe" element={<PrivateRoute><div>Página NF-e (Em desenvolvimento)</div></PrivateRoute>} />
-          <Route path="/configuracoes" element={<PrivateRoute><div>Página Configurações (Em desenvolvimento)</div></PrivateRoute>} />
+          <Route path="/configuracoes" element={<PrivateRoute><Settings /></PrivateRoute>} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -14,10 +14,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAdd }) => {
             onClick={() => onAdd(product)}
             className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer hover:shadow-md transition-all active:scale-95 touch-manipulation flex flex-col h-full"
         >
-            <div className="h-32 bg-gray-100 flex items-center justify-center relative">
-                {/* Placeholder for Image if not available */}
-                <span className="text-4xl text-gray-300">📦</span>
-                {/* Mobile "Add" Overlay Hint */}
+            <div className="h-32 bg-gray-100 flex items-center justify-center relative overflow-hidden">
+                {product.imagem_url ? (
+                    <img src={product.imagem_url} alt={product.nome} className="w-full h-full object-cover" />
+                ) : (
+                    <span className="text-4xl text-gray-300">📦</span>
+                )}
+                {product.estoque !== undefined && product.estoque <= 5 && (
+                    <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold uppercase">
+                        Estoque Baixo
+                    </div>
+                )}
                 <div className="absolute bottom-2 right-2 bg-indigo-600 text-white p-1 rounded-full shadow-lg">
                     <Plus size={16} />
                 </div>

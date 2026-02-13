@@ -21,6 +21,9 @@ export interface Client {
   endereco: string;
   telefone: string;
   email: string;
+  limite_credito?: number;
+  saldo_devedor?: number;
+  dia_vencimento?: number;
 }
 
 export interface Product {
@@ -32,6 +35,9 @@ export interface Product {
   preco_venda: number;
   custo?: number;
   unidade_medida: string;
+  estoque?: number;
+  imagem_url?: string;
+  categoria?: string;
 }
 
 export interface CartItem extends Product {
@@ -51,14 +57,16 @@ export interface OrderItem {
   total_price: number;
 }
 
+export type OrderStatus = 'pending' | 'completed' | 'cancelled';
+
 export interface Order {
   id: string;
-  company_id?: string; // Legacy or future
+  company_id?: string;
   user_id: string;
   client_id?: string;
-  client?: Client; // Join
+  client?: Client;
   total_amount: number;
-  status: 'pending' | 'completed' | 'cancelled';
+  status: OrderStatus;
   payment_method: PaymentMethod;
   items?: OrderItem[];
   created_at: string;

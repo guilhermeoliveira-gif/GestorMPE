@@ -1,20 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Product, OrderItem } from '../../types';
 import { formatCurrency } from '../../utils';
-import { Trash2, Plus, Minus, ShoppingCart } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingCart, Pencil } from 'lucide-react';
 import { Button } from '../UI';
 
 interface CartProps {
     items: (OrderItem & { product: Product })[];
     onUpdateQuantity: (productId: string, delta: number) => void;
+    onSetQuantity: (productId: string, quantity: number) => void;
     onRemove: (productId: string) => void;
     onCheckout: () => void;
     isOpen: boolean;
     onClose: () => void;
 }
 
-export const Cart: React.FC<CartProps> = ({ items, onUpdateQuantity, onRemove, onCheckout, isOpen, onClose }) => {
+export const Cart: React.FC<CartProps> = ({
+    items,
+    onUpdateQuantity,
+    onSetQuantity,
+    onRemove,
+    onCheckout,
+    isOpen,
+    onClose
+}) => {
     const total = items.reduce((acc, item) => acc + item.total_price, 0);
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [tempQty, setTempQty] = useState<string>('');
+
+    const handleStartEdit = (item: any) => {
+        setEditingId(item.product_id);
+        setTempQty(item.quantity.toString());
+    };
+
+    const handleFinishEdit = (id: string) => {
+        const val = parseFloat(tempQty.replace(',', '.'));
+        if (!isNaN(val)) {
+            onSetQuantity(id, val);
+        }
+        setEditingId(null);
+    };
 
     return (
         <>
@@ -52,29 +76,49 @@ export const Cart: React.FC<CartProps> = ({ items, onUpdateQuantity, onRemove, o
                         ) : (
                             items.map(item => (
                                 <div key={item.product_id} className="flex justify-between items-center bg-white p-3 rounded-lg border border-gray-100 shadow-sm">
-                                    <div className="flex-1">
+                                    <div className="flex-1 min-w-0 mr-2">
                                         <h4 className="font-medium text-gray-800 line-clamp-1">{item.product.nome}</h4>
-                                        <p className="text-sm text-indigo-600 font-bold">
-                                            {formatCurrency(item.unit_price)}
-                                        </p>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm text-indigo-600 font-bold">
+                                                {formatCurrency(item.unit_price)}
+                                            </span>
+                                            <span className="text-[10px] text-gray-400 font-bold uppercase">/ {item.product.unidade_medida || 'un'}</span>
+                                        </div>
                                     </div>
 
                                     <div className="flex items-center gap-3">
-                                        <div className="flex items-center border rounded-md">
-                                            <button
-                                                className="p-1 hover:bg-gray-100 text-gray-600"
-                                                onClick={() => onUpdateQuantity(item.product_id, -1)}
-                                            >
-                                                <Minus size={14} />
-                                            </button>
-                                            <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
-                                            <button
-                                                className="p-1 hover:bg-gray-100 text-gray-600"
-                                                onClick={() => onUpdateQuantity(item.product_id, 1)}
-                                            >
-                                                <Plus size={14} />
-                                            </button>
-                                        </div>
+                                        {editingId === item.product_id ? (
+                                            <input
+                                                autoFocus
+                                                type="text"
+                                                className="w-16 p-1 border rounded text-center text-sm font-bold focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                value={tempQty}
+                                                onChange={e => setTempQty(e.target.value)}
+                                                onBlur={() => handleFinishEdit(item.product_id)}
+                                                onKeyDown={e => e.key === 'Enter' && handleFinishEdit(item.product_id)}
+                                            />
+                                        ) : (
+                                            <div className="flex items-center border rounded-md">
+                                                <button
+                                                    className="p-1 hover:bg-gray-100 text-gray-600"
+                                                    onClick={() => onUpdateQuantity(item.product_id, -1)}
+                                                >
+                                                    <Minus size={14} />
+                                                </button>
+                                                <button
+                                                    className="w-10 text-center text-sm font-bold hover:text-indigo-600"
+                                                    onClick={() => handleStartEdit(item)}
+                                                >
+                                                    {item.quantity}
+                                                </button>
+                                                <button
+                                                    className="p-1 hover:bg-gray-100 text-gray-600"
+                                                    onClick={() => onUpdateQuantity(item.product_id, 1)}
+                                                >
+                                                    <Plus size={14} />
+                                                </button>
+                                            </div>
+                                        )}
                                         <button
                                             onClick={() => onRemove(item.product_id)}
                                             className="text-red-400 hover:text-red-600 p-1"
@@ -94,7 +138,7 @@ export const Cart: React.FC<CartProps> = ({ items, onUpdateQuantity, onRemove, o
                         </div>
                         <Button
                             variant="primary"
-                            className="w-full py-4 text-lg shadow-lg bg-green-600 hover:bg-green-700"
+                            className="w-full py-4 text-lg shadow-lg bg-indigo-600 hover:bg-indigo-700"
                             onClick={onCheckout}
                             disabled={items.length === 0}
                         >

@@ -21,5 +21,37 @@ export const productService = {
 
         if (error) throw error;
         return data as Product;
+    },
+
+    async saveProduct(product: Omit<Product, 'id' | 'created_at'>) {
+        const { data, error } = await supabase
+            .from('products')
+            .insert([product])
+            .select()
+            .single();
+
+        if (error) throw error;
+        return data as Product;
+    },
+
+    async updateProduct(id: string, product: Partial<Product>) {
+        const { data, error } = await supabase
+            .from('products')
+            .update(product)
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) throw error;
+        return data as Product;
+    },
+
+    async deleteProduct(id: string) {
+        const { error } = await supabase
+            .from('products')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
     }
 };
